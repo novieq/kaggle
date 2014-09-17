@@ -19,5 +19,5 @@ while($line = <INFILE>) {
 }
 
 foreach my $i (1..26) {
-	while (my ($k,$v)=each $aoh[$i]){print "C${i},$k,$v,$aohClicks[$i]{$k}\n"};
+	while (my ($k,$v)=each $aoh[$i]){print "C${i},$k,$v,$aohClicks[$i]{$k},",$aohClicks[$i]{$k}/$v,"\n"};
 }
