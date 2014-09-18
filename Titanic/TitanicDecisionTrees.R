@@ -23,7 +23,7 @@ train$PassengerId = NULL;
 train$Name=NULL;
 
 #####################################################
-## Stage 2: Model building, using Gradient Boosting
+## Stage 2: Model building, using Decision Trees 
 #####################################################
 
 # Build a deeper tree
@@ -38,6 +38,8 @@ text(fit)
 # And then make it look better with fancyRpartPlot!
 fancyRpartPlot(fit)
 fit$cptable[which.min(fit$cptable[,"xerror"]),"CP"]
+new.fit <- prp(fit,snip=TRUE)$obj
+fancyRpartPlot(new.fit)
 #####################################################
 ## Stage 3: Predcit label for test data
 #####################################################
