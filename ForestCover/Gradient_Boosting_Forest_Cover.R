@@ -100,7 +100,7 @@ x_vars = setdiff(names(train),c("Cover_Type"))
 
 # Define the range of values over which we would want to cross-validate our model
 Grid <-  expand.grid(
-                    n.trees = c(250),
+                    n.trees = c(2000),
                     interaction.depth = c(22) ,
                     shrinkage = 0.2)
 

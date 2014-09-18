@@ -35,34 +35,8 @@ close(INFILE);
 #}
 #close OUTPUT;
 
-open(OUTFILE, ">train_ctr.csv") || die "Cannot open Summary";
-open(INFILE, "train_random.100000.csv") || die "Cannot open $fileName";
-$line = <INFILE>;
 
-while($line = <INFILE>) {
-        my @tokens = split(',', $line);
-	my $outLine="";
-	foreach my $i (0..14) {
-		$outLine="$outLine$tokens[$i],";
-	}
-        foreach my $i (1..26) { #$i loops from C1 to C26 iterating over the respective hashes
-                chomp $tokens[14+$i];
-		if($tokens[14+$i]=="") { $tokens[14+$i]="**";}
-		my $ctr;
-		if($aoh[$i]{$tokens[14+$i]}>100) {
-			$ctr = $aohClicks[$i]{$tokens[14+$i]}/$aoh[$i]{$tokens[14+$i]};
-		} else {
-			$ctr=0;
-		}
-                $outLine="$outLine$ctr,";
-#		print "$i . $tokens[14+$i] $aohClicks[$i]{$tokens[14+$i]} $aoh[$i]{$tokens[14+$i]} $ctr $outLine\n";
-        }
-	print OUTFILE $outLine,"\n";
-}
-close INFILE;
-close OUTFILE;
-
-open(OUTFILE, ">test_cv_ctr.csv") || die "Cannot open Summary";
+open(OUTFILE, ">test_cv_LR.csv") || die "Cannot open Summary";
 open(INFILE, "test_cv.csv") || die "Cannot open $fileName";
 $line = <INFILE>;
 
@@ -74,14 +48,11 @@ while($line = <INFILE>) {
         }
         foreach my $i (1..26) { #$i loops from C1 to C26 iterating over the respective hashes
                 chomp $tokens[14+$i];
-                if($tokens[14+$i]=="") { $tokens[14+$i]="**";}
-                my $ctr;
-                if($aoh[$i]{$tokens[14+$i]}>100) {
-                        $ctr = $aohClicks[$i]{$tokens[14+$i]}/$aoh[$i]{$tokens[14+$i]};
-                } else {
-                        $ctr=0;
-                }
-                $outLine="$outLine$ctr,";
+                if(exists($aohClicks[$i]{$tokens[14+$i]})) {
+			$outLine="$outLine$aohClicks[$i]{$tokens[14+$i]},";
+		} else {
+			$outLine="$outLine,";
+		}	
 #               print "$i . $tokens[14+$i] $aohClicks[$i]{$tokens[14+$i]} $aoh[$i]{$tokens[14+$i]} $ctr $outLine\n";
         }
         print OUTFILE $outLine,"\n";
@@ -90,7 +61,7 @@ while($line = <INFILE>) {
 close INFILE;
 close OUTFILE;
 
-open(OUTFILE, ">test_ctr.csv") || die "Cannot open Summary";
+open(OUTFILE, ">test_LR.csv") || die "Cannot open Summary";
 open(INFILE, "test.csv") || die "Cannot open $fileName";
 $line = <INFILE>;
 
@@ -102,14 +73,11 @@ while($line = <INFILE>) {
         }
         foreach my $i (1..26) { #$i loops from C1 to C26 iterating over the respective hashes
                 chomp $tokens[13+$i];
-                if($tokens[13+$i]=="") { $tokens[13+$i]="**";}
-                my $ctr;
-                if($aoh[$i]{$tokens[13+$i]}>100) {
-                        $ctr = $aohClicks[$i]{$tokens[13+$i]}/$aoh[$i]{$tokens[13+$i]};
+		if(exists($aohClicks[$i]{$tokens[13+$i]})) {
+                        $outLine="$outLine$aohClicks[$i]{$tokens[13+$i]},";
                 } else {
-                        $ctr=0;
+                        $outLine="$outLine,";
                 }
-                $outLine="$outLine$ctr,";
 #               print "$i . $tokens[14+$i] $aohClicks[$i]{$tokens[14+$i]} $aoh[$i]{$tokens[14+$i]} $ctr $outLine\n";
         }
         print OUTFILE $outLine,"\n";

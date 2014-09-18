@@ -44,6 +44,8 @@ write.csv(submit, file = "/Users/sayghosh/code/kaggle/test/criteo.csv", row.name
 print(Sys.time())
 
 
-mylogit <- glm(Label ~ I1 + I2 + I3 + I4 + I5 + I6 + I7 + I8 + I9 + I10 + I11 + I12 + I13 + C1 +C2 + C3 , data = train, family = "binomial")
+mylogit <- glm(Label ~ I1 + I2 + I3 + I4 + I5 + I6 + I7 + I8 + I9 + I10 + I11 + I12 + I13 , data = train, family = "binomial")
 summary(mylogit)
-Prediction <- predict(mylogit, newdata = test, type = "response")
+Prediction <- predict(mylogit, newdata = test)
+summary(Prediction)
+help(predict)
