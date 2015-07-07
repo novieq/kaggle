@@ -8,7 +8,7 @@ import pandas as pd
 from sklearn import svm
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
-from sklearn.ensemble import AdaBoostRegressor, AdaBoostClassifier
+from sklearn.ensemble import AdaBoostRegressor, AdaBoostClassifier, ExtraTreesRegressor
 
 from numpy import argsort
 
@@ -30,6 +30,25 @@ print test.shape
 print data.describe()
 
 #Subsampling of non-clicks data
+clicks = data[data['click']==1.0]
+print "Shape of the click data", clicks.shape
+
+nonclicks = data[data['click']==0.0]
+print "Shape of the non-click data", nonclicks.shape
+rows = random.sample(nonclicks.index, len(nonclicks.index)/6)
+nonclicks_5=nonclicks.ix[rows]
+
+data = clicks.append(nonclicks_5,ignore_index=True)
+print "New undersampled data set size", data.shape
+
+#Oversampling of clicks
+data.append(clicks, ignore_index=True)
+data.append(clicks, ignore_index=True)
+data.append(clicks, ignore_index=True)
+data.append(clicks, ignore_index=True)
+
+
+
 
 
 #Data preparation for cross validation testing
@@ -60,9 +79,12 @@ print 'ytrain' , ytrain.shape
 print 'test' , xtest.shape
 estimators=100
 #sup_vec = svm.SVC(C=11000, verbose = 2, probability=True)
-#sup_vec = RandomForestRegressor(n_estimators=estimators, verbose=2)
+#sup_vec = RandomForestRegressor(n_estimators=estimators, verbose=2, n_jobs=-1, max_leaf_nodes=100)
+#sup_vec = ExtraTreesRegressor(n_estimators=estimators, verbose=2, n_jobs=-1, max_leaf_nodes=100)
 
-sup_vec =  AdaBoostRegressor(RandomForestRegressor(n_estimators=100, verbose=2),n_estimators=100)
+
+#sup_vec =  AdaBoostRegressor(RandomForestRegressor(n_estimators=100, verbose=2, n_jobs = -1),n_estimators=100)
+sup_vec =  AdaBoostRegressor(ExtraTreesRegressor(n_estimators=100, verbose=2, n_jobs=-1),n_estimators=160, loss='exponential')
 
 #sup_vec =  AdaBoostRegressor(DecisionTreeRegressor(max_depth=10),n_estimators=300)
 
